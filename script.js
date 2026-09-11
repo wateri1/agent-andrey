@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ------------------------------------------------------------------
-  // ПРОТОКОЛ 01: ТЕРМИНАЛ ШИФРА 1971
+  // ПРОТОКОЛ 01: ТЕРМИНАЛ ШИФРА 1979
   // ------------------------------------------------------------------
   const pinSlotsContainer = document.getElementById('digit-slots');
   const termStatus = document.getElementById('term-status-line');
@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function verifyPin() {
-    const correctPin = config.secretCode || '1971';
+    const correctPin = config.secretCode || '1979';
     if (state.enteredPin === correctPin) {
       audio.playUnlockChime();
       termStatus.textContent = 'ДОСТУП РАЗРЕШЕН. ПЕРЕХОД К ПРОТОКОЛУ 02';
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (autofillKey) {
     autofillKey.addEventListener('click', () => {
       audio.playTactileKey();
-      state.enteredPin = (config.secretCode || '1971').toString();
+      state.enteredPin = (config.secretCode || '1979').toString();
       renderPinSlots();
       setTimeout(verifyPin, 200);
     });
