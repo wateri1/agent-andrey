@@ -1,0 +1,646 @@
+/* ====================================================================
+   TASTE-SKILL ENHANCED: LUXURY EDITORIAL SECRET AGENT ANDREY
+   Anti-Slop Design System: Obsidian + Brushed Titanium + Warm Gold Foil
+   Vintage Punched Card Integration for Soviet / IBM Archive
+   ==================================================================== */
+
+:root {
+  --bg-obsidian: #06080d;
+  --bg-panel: rgba(12, 16, 25, 0.86);
+  --bg-panel-solid: #0d121c;
+  --border-hairline: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.35);
+  --border-gold-glow: rgba(212, 175, 55, 0.6);
+  --gold-primary: #d4af37;
+  --gold-light: #f3e5ab;
+  --gold-dark: #997a15;
+  --stamp-red: #dc2626;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-gold: #f3e5ab;
+  --radius-card: 16px;
+  --radius-button: 9999px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+  background-image: 
+    radial-gradient(ellipse 60% 40% at 75% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 85%, rgba(30, 41, 59, 0.4) 0%, transparent 70%);
+}
+
+.mono-font {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Фоновые холсты */
+#radar-canvas, #confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+#radar-canvas { z-index: 1; }
+#confetti-canvas { z-index: 9999; }
+
+/* Главный контейнер */
+.editorial-shell {
+  position: relative;
+  z-index: 10;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 3.5rem;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Верхняя полоса навигации (Executive Status Bar) */
+.executive-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(10, 14, 22, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-button);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.beacon-dot {
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #22c55e;
+  animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.85); opacity: 0.4; }
+}
+
+.header-action-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-primary);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-button);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-action-btn:hover {
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--border-gold);
+  color: var(--gold-light);
+}
+
+/* Шаги протокола (Protocol Pills) */
+.protocol-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.75rem;
+}
+
+.protocol-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-button);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.protocol-pill.active {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: var(--gold-primary);
+  color: var(--gold-light);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+.protocol-pill.done {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+/* Базовый стиль карточки */
+.executive-card {
+  background: var(--bg-panel);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-card);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.45s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Кнопки */
+.btn-gold-action {
+  background: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
+  color: #06080d;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.9rem 2rem;
+  border-radius: var(--radius-button);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px -4px rgba(212, 175, 55, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.btn-gold-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(212, 175, 55, 0.65);
+  filter: brightness(1.06);
+}
+
+.btn-gold-action:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-subtle-action {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  padding: 0.85rem 1.6rem;
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.btn-subtle-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* ====================================================================
+   HERO: ASYMMETRIC CINEMATIC SPLIT
+   ==================================================================== */
+.hero-editorial-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.5rem 1.75rem;
+}
+
+@media (min-width: 960px) {
+  .hero-editorial-grid {
+    grid-template-columns: 1.15fr 1fr;
+    padding: 3.5rem 3rem;
+  }
+}
+
+.classification-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.hero-headline {
+  font-size: 2.3rem;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(145deg, #ffffff 0%, #f3e5ab 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.2rem;
+}
+
+@media (min-width: 640px) {
+  .hero-headline { font-size: 3.2rem; }
+}
+
+.hero-lead {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+
+/* Оформление фотографии Агента Андрея */
+.agent-portrait-shell {
+  position: relative;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.agent-portrait-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 175, 55, 0.15);
+  aspect-ratio: 16 / 10;
+  background: #020305;
+}
+
+.agent-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agent-portrait-shell:hover .agent-portrait-img {
+  transform: scale(1.03);
+}
+
+.telemetry-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(6, 8, 13, 0.88);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+/* ====================================================================
+   ПРОТОКОЛ 01: ШИФРОВАЛЬНЫЙ ТЕРМИНАЛ
+   ==================================================================== */
+.console-wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+  background: #04060a;
+  border: 1px solid var(--border-gold);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.console-readout {
+  background: #020306;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.code-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 2.2rem;
+  align-items: center;
+}
+
+.code-digit-slot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #334155;
+  transition: all 0.2s ease;
+}
+
+.code-digit-slot.filled {
+  background: var(--gold-primary);
+  border-color: var(--gold-light);
+  box-shadow: 0 0 12px var(--gold-primary);
+  transform: scale(1.15);
+}
+
+.console-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.console-key {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  height: 54px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.console-key:hover {
+  background: rgba(212, 175, 55, 0.18);
+  border-color: var(--border-gold);
+  color: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.console-key:active {
+  transform: translateY(1px);
+  background: rgba(212, 175, 55, 0.3);
+}
+
+.hint-badge-box {
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px dashed var(--border-gold);
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+/* ====================================================================
+   ПРОТОКОЛ 02: РАДАР И ПЕРЕХВАТ РАЗВЕДДАННЫХ
+   ==================================================================== */
+.radar-display-chamber {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  background: #030508;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  cursor: crosshair;
+}
+
+.intel-target-node {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(18, 24, 38, 0.9);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-light);
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.2);
+  transition: transform 0.15s ease;
+}
+
+.intel-target-node:hover {
+  transform: scale(1.2);
+  border-color: var(--gold-light);
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.intel-brief-toast {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 20, 30, 0.95);
+  border: 1px solid var(--border-gold);
+  color: #ffffff;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.3);
+  z-index: 50;
+  text-align: center;
+  animation: toastSlide 0.3s ease-out;
+  max-width: 90%;
+}
+
+@keyframes toastSlide {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ====================================================================
+   ПРОТОКОЛ 03: ВИНТАЖНАЯ ПЕРФОКАРТА (PUNCHED CARD)
+   ==================================================================== */
+.punched-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0.5rem;
+}
+
+/* Винтажная перфокарта IBM со скошенным углом */
+.vintage-punchcard {
+  width: 100%;
+  max-width: 520px;
+  background: #e8dcc4;
+  color: #1e293b;
+  border-radius: 4px;
+  clip-path: polygon(22px 0%, 100% 0%, 100% 100%, 0% 100%, 0% 22px);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+  position: relative;
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+.punchcard-top-bar {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #334155;
+}
+
+.punchcard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  line-height: 1;
+  color: #64748b;
+}
+
+.punchcard-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 20px;
+}
+
+/* Прямоугольные просечки (Punched Holes) */
+.punch-hole {
+  width: 10px;
+  height: 18px;
+  background: #06080d;
+  border-radius: 1px;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* Интерактивные слоты для пробивки */
+.punch-interactive-slot {
+  width: 14px;
+  height: 22px;
+  border: 2px dashed #b45309;
+  border-radius: 2px;
+  background: rgba(180, 83, 9, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slotPulse 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes slotPulse {
+  0% { transform: scale(1); border-color: #b45309; }
+  100% { transform: scale(1.15); border-color: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
+}
+
+.punch-interactive-slot.punched {
+  background: #06080d;
+  border: 1px solid #06080d;
+  animation: none;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.9);
+  cursor: default;
+}
+
+.punchcard-footer-info {
+  margin-top: 0.8rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  padding-top: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: #475569;
+}
+
+/* ====================================================================
+   ПРОТОКОЛ 04: РАССЕКРЕЧЕННОЕ ДОСЬЕ
+   ==================================================================== */
+.dossier-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.2rem;
+  align-items: start;
+}
+
+@media (min-width: 920px) {
+  .dossier-layout {
+    grid-template-columns: 1fr 1.35fr;
+  }
+}
+
+.dossier-visual-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.briefcase-asset-frame {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-gold);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+  aspect-ratio: 16 / 9;
+  background: #020305;
+}
+
+.briefcase-asset-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.declassified-rubber-stamp {
+  display: inline-block;
+  border: 2px solid var(--stamp-red);
+  color: var(--stamp-red);
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  margin-bottom: 0.75rem;
+}
+
+.hq-signature-cursive {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  color: var(--gold-light);
+  margin-top: 1.2rem;
+  line-height: 1.1;
+}
+
+.hidden { display: none !important; }

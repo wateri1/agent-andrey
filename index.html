@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>АГЕНТ АНДРЕЙ // TOP SECRET DOSSIER</title>
+  
+  <!-- Шрифты: Outfit (чистый современный гротеск) + JetBrains Mono (технический досье-шрифт) + Caveat (рукописная подпись) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Стили проекта -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Холсты: радарный фон и золотое конфетти -->
+  <canvas id="radar-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <main class="editorial-shell">
+    
+    <!-- Верхняя статусная панель -->
+    <header class="executive-header">
+      <div class="status-indicator">
+        <span class="beacon-dot"></span>
+        <span class="mono-font">TOP SECRET // AGENT: ANDREY</span>
+      </div>
+
+      <button id="sound-toggle-btn" class="header-action-btn" title="Аудиосопровождение">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <span class="sound-btn-text mono-font">САУНДТРЕК: ВЫКЛ</span>
+      </button>
+    </header>
+
+    <!-- Полоса протоколов -->
+    <nav class="protocol-nav" aria-label="Протоколы авторизации">
+      <div id="nav-pill-1" class="protocol-pill active">01. ШИФР 1971</div>
+      <span class="text-slate-600 text-xs">/</span>
+      <div id="nav-pill-2" class="protocol-pill">02. РАДАР ДАННЫХ</div>
+      <span class="text-slate-600 text-xs">/</span>
+      <div id="nav-pill-3" class="protocol-pill">03. ПЕРФОКАРТА</div>
+      <span class="text-slate-600 text-xs">/</span>
+      <div id="nav-pill-4" class="protocol-pill">04. ДОСЬЕ</div>
+    </nav>
+
+    <!-- ============================================================
+         ЭКРАН 0: HERO (CINEMATIC SPLIT)
+         ============================================================ -->
+    <section id="view-hero" class="executive-card hero-editorial-grid">
+      <div>
+        <div class="classification-tag mono-font">
+          СТАТУС: ВЫСШИЙ ПРИОРИТЕТ // ОПЕРАЦИЯ: ДЕНЬ РОЖДЕНИЯ
+        </div>
+
+        <h1 class="hero-headline">
+          АГЕНТ АНДРЕЙ:<br>МИССИЯ ВЫПОЛНИМА
+        </h1>
+
+        <p class="hero-lead">
+          Уровень допуска: <strong class="text-amber-300 font-semibold">Альфа</strong>. Центральное командование подготовило закрытое досье и праздничный приказ для Агента Андрея. Подтвердите авторизацию для снятия грифа секретности.
+        </p>
+
+        <button id="hero-init-btn" class="btn-gold-action">
+          <span>АКТИВИРОВАТЬ ПРОТОКОЛ</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Фото Агента Андрея в кинематографичной рамке -->
+      <div class="agent-portrait-shell">
+        <div class="agent-portrait-frame">
+          <img src="assets/agent_hero.jpg" alt="Агент Андрей" class="agent-portrait-img" onerror="this.src='https://picsum.photos/seed/secretagent/900/600'">
+          <div class="telemetry-strip mono-font">
+            <span class="text-amber-400 font-bold">ПОЗЫВНОЙ: АНДРЕЙ</span>
+            <span class="text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              СТАТУС: НА СВЯЗИ
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ПРОТОКОЛ 01: ШИФРОВАЛЬНЫЙ ТЕРМИНАЛ
+         ============================================================ -->
+    <section id="view-protocol-1" class="executive-card p-6 sm:p-12 text-center hidden">
+      <div class="classification-tag mono-font">
+        ПРОТОКОЛ АВТОРИЗАЦИИ 01 / 03
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-extrabold mb-2 tracking-tight text-white">
+        ВВОД КОДА ДОПУСКА
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
+        Введите 4-значный шифр для верификации личности Агента Андрея.
+      </p>
+
+      <div class="console-wrapper">
+        <div class="console-readout">
+          <div id="digit-slots" class="code-indicators"></div>
+          <div id="term-status-line" class="mono-font text-xs text-slate-400 mt-2 min-h-[1.25rem]">
+            ОЖИДАНИЕ ВВОДА КОДА АВТОРИЗАЦИИ
+          </div>
+        </div>
+
+        <div id="console-keypad" class="console-keypad mono-font">
+          <button class="console-key" data-val="1">1</button>
+          <button class="console-key" data-val="2">2</button>
+          <button class="console-key" data-val="3">3</button>
+          <button class="console-key" data-val="4">4</button>
+          <button class="console-key" data-val="5">5</button>
+          <button class="console-key" data-val="6">6</button>
+          <button class="console-key" data-val="7">7</button>
+          <button class="console-key" data-val="8">8</button>
+          <button class="console-key" data-val="9">9</button>
+          <button class="console-key text-rose-400 text-xs" data-val="clear">СБРОС</button>
+          <button class="console-key" data-val="0">0</button>
+          <button class="console-key text-emerald-400 text-xs" data-val="ok">ВВОД</button>
+        </div>
+
+        <!-- Подсказка к коду -->
+        <div class="hint-badge-box mono-font text-xs text-amber-300">
+          <div class="font-bold mb-0.5">ПОДСКАЗКА:</div>
+          <div id="code-hint-box" class="text-slate-300">
+            Год компиляции базовой версии Агента Андрея (1971)
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/80 text-xs">
+          <button id="keycard-autofill" class="text-amber-400 hover:text-amber-300 font-semibold underline mono-font">
+            [КЛЮЧ-КАРТА: АВТОЗАПОЛНЕНИЕ 1971]
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ПРОТОКОЛ 02: ПЕРЕХВАТ ДАННЫХ
+         ============================================================ -->
+    <section id="view-protocol-2" class="executive-card p-6 sm:p-12 text-center hidden">
+      <div class="classification-tag mono-font">
+        ПРОТОКОЛ АВТОРИЗАЦИИ 02 / 03
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-extrabold mb-2 tracking-tight text-white">
+        ПЕРЕХВАТ РАЗВЕДДАННЫХ
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base max-w-md mx-auto mb-2 leading-relaxed">
+        Нажимайте на сигналы целей на радаре, чтобы расшифровать досье ключевых качеств Агента Андрея.
+      </p>
+
+      <div class="mono-font text-xs font-bold text-amber-400 tracking-wider mb-2">
+        СИГНАЛЫ: <span id="collected-count-num" class="text-lg text-white">0</span> / 5
+      </div>
+
+      <div id="radar-chamber" class="radar-display-chamber"></div>
+
+      <button id="to-protocol-3-btn" class="btn-gold-action hidden">
+        <span>ДАННЫЕ СОБРАНЫ. ПЕРЕЙТИ К ПЕРФОКАРТЕ</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </section>
+
+    <!-- ============================================================
+         ПРОТОКОЛ 03: ВИНТАЖНАЯ ПЕРФОКАРТА АГЕНТА АНДРЕЯ
+         ============================================================ -->
+    <section id="view-protocol-3" class="executive-card p-6 sm:p-12 text-center hidden">
+      <div class="classification-tag mono-font">
+        ФИНАЛЬНЫЙ КОНТУР 03 / 03: РЕТРО-КОМПИЛЯЦИЯ
+      </div>
+
+      <h2 class="text-2xl sm:text-3xl font-extrabold mb-2 tracking-tight text-white">
+        ПЕРФОКАРТА АГЕНТА АНДРЕЯ
+      </h2>
+      <p id="punch-status-line" class="text-slate-300 text-sm sm:text-base max-w-lg mx-auto mb-4 leading-relaxed">
+        Нажмите на 3 подсвеченных слота, чтобы пробить перфокарту и запустить исполнение программы.
+      </p>
+
+      <div class="mono-font text-xs font-bold text-amber-400 tracking-wider mb-3">
+        ПРОБИТО СЛОТОВ: <span id="punch-counter-num" class="text-lg text-white">0 / 3</span>
+      </div>
+
+      <div class="punched-card-container">
+        
+        <!-- Винтажная перфокарта -->
+        <div class="vintage-punchcard mono-font">
+          <div class="punchcard-top-bar">
+            <span>SOVIET // IBM ARCHIVE</span>
+            <span class="font-bold text-amber-900">PROG: AGENT_ANDREY_1971.BIN</span>
+            <span>COL: 80</span>
+          </div>
+
+          <div class="punchcard-grid">
+            <!-- Ряд 0 -->
+            <div class="punchcard-row">
+              <span>0 0 0 0</span>
+              <div class="punch-hole"></div>
+              <span>0 0 0 0 0</span>
+              <!-- Интерактивный слот 1: Column 19 -->
+              <div class="punch-interactive-slot" data-slot="1" title="Нажмите, чтобы пробить"></div>
+              <span>0 0 0 0 0 0 0 0</span>
+              <div class="punch-hole"></div>
+              <span>0 0 0 0 0</span>
+            </div>
+
+            <!-- Ряд 1 -->
+            <div class="punchcard-row">
+              <span>1 1 1 1 1 1 1</span>
+              <div class="punch-hole"></div>
+              <span>1 1 1 1 1 1 1 1 1 1</span>
+              <div class="punch-hole"></div>
+              <span>1 1 1 1 1</span>
+            </div>
+
+            <!-- Ряд 2 -->
+            <div class="punchcard-row">
+              <span>2 2 2 2</span>
+              <div class="punch-hole"></div>
+              <span>2 2 2 2 2 2 2 2 2</span>
+              <!-- Интерактивный слот 2: Column 71 -->
+              <div class="punch-interactive-slot" data-slot="2" title="Нажмите, чтобы пробить"></div>
+              <span>2 2 2 2 2 2 2 2</span>
+              <div class="punch-hole"></div>
+              <span>2 2 2</span>
+            </div>
+
+            <!-- Ряд 3 -->
+            <div class="punchcard-row">
+              <span>3 3 3 3 3 3 3 3 3</span>
+              <div class="punch-hole"></div>
+              <span>3 3 3 3 3 3 3 3 3 3</span>
+              <div class="punch-hole"></div>
+              <span>3 3 3 3</span>
+            </div>
+
+            <!-- Ряд 4 -->
+            <div class="punchcard-row">
+              <span>4 4 4 4 4 4 4</span>
+              <div class="punch-hole"></div>
+              <span>4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4</span>
+              <!-- Интерактивный слот 3: Column 80 (EXECUTE) -->
+              <div class="punch-interactive-slot" data-slot="3" title="Нажмите, чтобы пробить"></div>
+              <span>4 4</span>
+            </div>
+
+            <!-- Ряд 5-9 -->
+            <div class="punchcard-row">
+              <span>5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5</span>
+            </div>
+            <div class="punchcard-row">
+              <span>7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7</span>
+            </div>
+            <div class="punchcard-row">
+              <span>9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9</span>
+            </div>
+          </div>
+
+          <div class="punchcard-footer-info">
+            <span>CODE: 1971</span>
+            <span>STATUS: READY TO PUNCH</span>
+            <span>VERIFIED: HQ</span>
+          </div>
+        </div>
+
+        <p class="mono-font text-xs text-slate-500">
+          [КЛИКАЙТЕ ПО МИГАЮЩИМ СЛОТАМ ДЛЯ ПРОБИВКИ ОТВЕРСТИЙ]
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         ПРОТОКОЛ 04: РАССЕКРЕЧЕННОЕ ДОСЬЕ
+         ============================================================ -->
+    <section id="view-protocol-4" class="executive-card p-6 sm:p-12 hidden">
+      
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-6">
+        <div>
+          <span class="declassified-rubber-stamp mono-font">РАССЕКРЕЧЕНО</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            ЛИЧНОЕ ДЕЛО: АГЕНТ АНДРЕЙ
+          </h2>
+        </div>
+        <div class="text-right hidden sm:block">
+          <div class="mono-font text-xs text-slate-400">ГРИФ:</div>
+          <div class="mono-font text-emerald-400 font-bold text-xs tracking-wider">ОПЕРАЦИЯ ЗАВЕРШЕНА</div>
+        </div>
+      </div>
+
+      <div class="dossier-layout">
+        
+        <!-- Колонка изображений -->
+        <div class="dossier-visual-stack">
+          <div class="agent-portrait-frame">
+            <img src="assets/agent_hero.jpg" alt="Агент Андрей" class="agent-portrait-img">
+            <div class="telemetry-strip mono-font">
+              <span class="text-amber-400 font-bold">ОПЕРАТИВНИК АНДРЕЙ</span>
+              <span class="text-slate-300">ГОТОВ К НОВЫМ ПОБЕДАМ</span>
+            </div>
+          </div>
+
+          <div class="briefcase-asset-frame">
+            <img src="assets/briefcase.jpg" alt="Секретный дипломат" class="briefcase-asset-img">
+          </div>
+        </div>
+
+        <!-- Поздравительный приказ от Штаба -->
+        <div class="flex flex-col justify-between">
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold text-amber-300 mb-4 tracking-tight">
+              ПРИКАЗ ГЛАВНОГО ШТАБА: БЫТЬ СЧАСТЛИВЫМ
+            </h3>
+
+            <div id="dossier-orders-content">
+              <!-- Наполняется из config.js -->
+            </div>
+          </div>
+
+          <div class="border-t border-slate-800/80 pt-4 mt-6">
+            <div class="mono-font text-xs uppercase tracking-widest text-slate-400 mb-1">
+              УТВЕРЖДЕНО И СКРЕПЛЕНО ПЕЧАТЬЮ:
+            </div>
+            <div id="dossier-signature-text" class="hq-signature-cursive">
+              С любовью и безграничным уважением, твой Главный Штаб
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Действия финала -->
+      <div class="flex flex-wrap justify-center gap-3 mt-8 pt-6 border-t border-slate-800/80">
+        <button id="btn-salute-burst" class="btn-gold-action">
+          <span>ПРАЗДНИЧНЫЙ САЛЮТ</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          </svg>
+        </button>
+
+        <button id="btn-restart-protocol" class="btn-subtle-action">
+          <span>ПЕРЕЗАПУСК ПРОТОКОЛА</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Скрипты -->
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
